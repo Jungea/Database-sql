@@ -1,0 +1,61 @@
+/*
+작성자: 정은애
+작성일: 2018.06.11.(수업일자:2018.6.7.)
+pg38~39
+*/
+
+--1. 다음의 table instance chart를 참고하여 DEPT 테이블을 생성하라. 체이블이 생성되었음을 확인하라.
+CREATE TABLE DEPT(
+ID NUMBER(7),
+NAME VARCHAR2(25),
+CONSTRAINT d_dept_id_pk PRIMARY KEY(ID));
+
+SELECT *
+FROM DEPT;
+
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE, SEARCH_CONDITION
+FROM USER_CONSTRAINTS
+WHERE TABLE_NAME = 'DEPT';
+
+--2. 다음의 table instance chart를 참고하여 EMP 테이블을 생성하라. 테이블이 생성되었음을 확인하라.
+CREATE TABLE EMP(
+ID NUMBER(7),
+LAST_NAME VARCHAR2(25),
+FIRST_NAME VARCHAR2(25),
+DEPT_ID NUMBER(7), 
+CONSTRAINT emp_deptid_fk FOREIGN KEY(DEPT_ID) REFERENCES DEPT(ID));
+
+SELECT *
+FROM EMP;
+
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE, SEARCH_CONDITION
+FROM USER_CONSTRAINTS
+WHERE TABLE_NAME = 'EMP';
+
+--3. EMPLOYEE 테이블의 각 컬럼들의 타입을 확인하라. 
+--Employee 테이블의 EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY, DEPARTMENT_ID을 가지는 EMPLOYEE2테이블을 생성하라.
+--단, 컬럼 이름은 ID, FIRST_NAME, LAST_NAME, SALARY, DEPT_ID로 한다.
+CREATE TABLE EMPLOYEE2 (
+ID NUMBER(6), FIRST_NAME VARCHAR2(20), LAST_NAME VARCHAR2(25),
+SALARY NUMBER(8), DEPT_ID NUMBER(4) );
+
+--4. Table-level PRIMARY KEY 제한조건을 EMP table의 ID 컬럼에 설정하라. 제한 조건의 이름은 my_emp_id_pk이다.
+ALTER TABLE EMP
+ADD CONSTRAINT my_emp_id_pk PRIMARY KEY(ID);
+
+--5. DEPT의 이름은 중복된 값을 갖지 않도록 보장하라. 제한조건의 이름은 my_dept_name_uq이다.
+ALTER TABLE DEPT
+ADD CONSTRAINT my_dept_name_uq UNIQUE(NAME);
+
+--6. 이름이 같은 사원은 채용하지 않기로 결정했다고 가정하자. 이를 보장받기 위한 제한조건을 설정하라. 이름은 emp_name_uq이다.
+ALTER TABLE EMP
+ADD CONSTRAINT emp_name_uq UNIQUE(FIRST_NAME, LAST_NAME);
+
+
+--CONSTRAINT 제거
+--ALTER TABLE DEPT
+--DROP CONSTRAINT 이름;
+
+--CONSTRAINT 추가
+--ALTER TABLE DEPT
+--ADD CONSTRAINT 이름 조건(컬럼);
